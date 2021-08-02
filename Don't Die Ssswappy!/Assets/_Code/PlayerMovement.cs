@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float forceMagnitude;
     [SerializeField] private float maxVelocity;
+    [SerializeField] private float rotationSpeed;
 
     private Rigidbody rb;
     private Camera mainCamera;
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     {
         ProcessInput();
         KeepPlayerOnScreen();
+        RotateToFaceVelocity();
     }
 
     private void FixedUpdate()
@@ -60,25 +62,36 @@ public class PlayerMovement : MonoBehaviour
     void KeepPlayerOnScreen()
     {
         Vector3 newPosition = transform.position;
-        Vector3 ViewportPosition = mainCamera.WorldToViewportPoint(transform.position);
+        Vector3 viewportPosition = mainCamera.WorldToViewportPoint(transform.position);
 
-        if(ViewportPosition.x > 1)
+        if (viewportPosition.x > 1)
         {
             newPosition.x = -newPosition.x + 0.1f;
         }
-        else if(ViewportPosition.x < 0)
+        else if (viewportPosition.x < 0)
         {
             newPosition.x = -newPosition.x - 0.1f;
         }
-        else if (ViewportPosition.y > 1)
+
+        if (viewportPosition.y > 1)
         {
             newPosition.y = -newPosition.y + 0.1f;
         }
-        else if (ViewportPosition.x < 0)
+        else if (viewportPosition.y < 0)
         {
             newPosition.y = -newPosition.y - 0.1f;
         }
 
         transform.position = newPosition;
+    }
+
+    void RotateToFaceVelocity()
+    {
+        if(rb.velocity == Vector3.zero) { return; }
+
+        Quaternion targetRotation = Quaternion.LookRotation(rb.velocity, Vector3.forward);
+
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 }
