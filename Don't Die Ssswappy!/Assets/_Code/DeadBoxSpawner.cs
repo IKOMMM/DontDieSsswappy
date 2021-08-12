@@ -64,6 +64,7 @@ public class DeadBoxSpawner : MonoBehaviour
         worldSpawnPoint.z = 0;
 
         GameObject selectedDeadBox = deadBoxPrefabs[Random.Range(0, deadBoxPrefabs.Length)];
+
         GameObject deadBoxInstance = Instantiate(
             selectedDeadBox, 
             worldSpawnPoint, 
