@@ -18,6 +18,11 @@ public class ScoreHandler : MonoBehaviour
         scoreText.text = Mathf.FloorToInt(score).ToString();
     }
 
+    public void StartTimer()
+    {
+        shouldCount = true;
+    }
+
     public int EndCounting()
     {
         shouldCount = false;
